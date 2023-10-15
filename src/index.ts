@@ -1,6 +1,4 @@
 import express from 'express';
-// import cookieParser from 'cookier-parser';
-// import compression from 'compression';
 import cors from 'cors';
 import connectDb from './config/db';
 import errorHandler from './middlewares/errorHandler';

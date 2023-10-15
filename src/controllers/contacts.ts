@@ -32,8 +32,6 @@ export const createContact = async (req: Request, res: Response) => {
       .status(201)
       .json({ ...contact, phoneNumber: decrypt(contact.phoneNumber) });
   } catch (error) {
-    console.log(error);
-    console.log(error);
     res.send(400);
     throw new Error(error);
   }
@@ -47,7 +45,6 @@ export const getAllContacts = async (req: Request, res: Response) => {
     });
     return res.status(200).json(contacts);
   } catch (error) {
-    console.log(error);
     res.send(400);
     throw new Error(error);
   }
@@ -57,7 +54,6 @@ export const getContact = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const contact = await getContactById(id);
-    console.log(contact);
     if (!contact) {
       res.status(404);
       return res.json({ message: 'Contact does not exist' });
@@ -80,7 +76,6 @@ export const updateContact = async (req: Request, res: Response) => {
     res.status(200);
     res.json({ ...contact, phoneNumber: decrypt(contact.phoneNumber) });
   } catch (error) {
-    console.log(error);
     res.send(400);
     throw new Error(error);
   }
@@ -92,7 +87,6 @@ export const deleteUserContact = async (req: Request, res: Response) => {
     await deleteContact(id);
     return res.status(200).json({ message: 'Contact deleted successfully' });
   } catch (error) {
-    console.log(error);
     res.send(400);
     throw new Error(error);
   }

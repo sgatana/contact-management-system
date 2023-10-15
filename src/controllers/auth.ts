@@ -22,7 +22,6 @@ export const registerUser = async (req: Request, res: Response) => {
     });
     return res.status(201).json(user);
   } catch (error) {
-    console.log(error);
     res.status(400);
     res.json({ error });
   }
@@ -32,7 +31,6 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const user = await getUserByEmail(email).select('+password');
-    console.log(user)
     if (!user) {
       res.status(401);
       return res.json({ error: 'Invalid Credentials' });
@@ -48,7 +46,6 @@ export const login = async (req: Request, res: Response) => {
       accessToken: generateAccessToken(email),
     });
   } catch (error) {
-    console.log(error)
     res.status(401);
     res.json({ error: 'Invalid Credentialsss' });
   }
