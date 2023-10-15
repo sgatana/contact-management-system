@@ -9,7 +9,7 @@ export const generateAccessToken = (email: string) => {
   return jwt.sign({ email }, secret, { expiresIn: '7d' });
 };
 
-export const authenticationMiddleware = (
+export const authMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -27,7 +27,11 @@ export const authenticationMiddleware = (
       });
     } catch (error) {
       res.status(401);
-      throw new Error('Not authenticated');
+     return res.json({error: 'Not authenticated'});
     }
+  }
+  if(!token) {
+    res.status(401);
+    return res.json({error: 'Not authenticated'});
   }
 };

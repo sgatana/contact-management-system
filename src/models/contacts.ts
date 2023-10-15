@@ -18,11 +18,14 @@ export const ContactModel = mongoose.model('contacts', ContactSchema);
 
 // Contact Actions
 export const getContacts = () => ContactModel.find();
-export const getContactById = (id: string) => ContactModel.findById(id);
+export const getContactById = (id: string) =>
+  ContactModel.findById(id).then((contact) => contact?.toObject());
 export const getContactByPhoneNumber = (phoneNumber: string) =>
   ContactModel.findOne({ phoneNumber });
 export const createContact = (values: Record<string, any>) =>
-  ContactModel.create(values);
+  ContactModel.create(values).then((contact) => contact?.toObject());
 export const deleteContact = (id: string) => ContactModel.findByIdAndDelete(id);
 export const updateContact = (id: string, values: Record<string, any>) =>
-  ContactModel.findByIdAndUpdate(id, values);
+  ContactModel.findByIdAndUpdate(id, values).then((contact) =>
+    contact?.toObject()
+  );

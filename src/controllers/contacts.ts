@@ -14,11 +14,11 @@ export const createContact = async (req: Request, res: Response) => {
   try {
     const { email, phoneNumber, firstName, lastName, type, isActive } =
       req.body as Contact;
-      const encodedPhone = encrypt(phoneNumber);
+    const encodedPhone = encrypt(phoneNumber);
     const existingContact = await getContactByPhoneNumber(encodedPhone);
     if (existingContact) {
       res.status(400);
-      return res.json({message: 'Contact already added'});
+      return res.json({ message: 'Contact already added' });
     }
     const contact = await create({
       email,
@@ -28,11 +28,9 @@ export const createContact = async (req: Request, res: Response) => {
       type,
       isActive,
     });
-    Object.assign(
-      {},
-      { ...contact, phoneNumber: decrypt(contact.phoneNumber) }
-    );
-    return res.status(201).json(contact);
+    return res
+      .status(201)
+      .json({ ...contact, phoneNumber: decrypt(contact.phoneNumber) });
   } catch (error) {
     console.log(error);
     console.log(error);
@@ -47,7 +45,7 @@ export const getAllContacts = async (req: Request, res: Response) => {
     contacts.forEach((contactObj) => {
       contactObj.phoneNumber = decrypt(contactObj.phoneNumber);
     });
-    return res.status(201).json(contacts);
+    return res.status(200).json(contacts);
   } catch (error) {
     console.log(error);
     res.send(400);
@@ -59,18 +57,16 @@ export const getContact = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const contact = await getContactById(id);
-    if (contact) {
+    console.log(contact);
+    if (!contact) {
       res.status(404);
-      return({message: 'Contact does not exist'});
+      return res.json({ message: 'Contact does not exist' });
     }
-    Object.assign(
-      {},
-      { ...contact, phoneNumber: decrypt(contact.phoneNumber) }
-    );
-    return res.status(201).json(contact);
+    return res
+      .status(200)
+      .json({ ...contact, phoneNumber: decrypt(contact.phoneNumber) });
   } catch (error) {
-    console.log(error);
-    res.send(400);
+    res.send(404);
     throw new Error(error);
   }
 };
@@ -79,13 +75,10 @@ export const updateContact = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const updatedContact = req.body as Contact;
+    updatedContact.phoneNumber = encrypt(updatedContact.phoneNumber);
     const contact = await update(id, updatedContact);
-    Object.assign(
-      {},
-      { ...contact, phoneNumber: decrypt(contact.phoneNumber) }
-    );
-    res.status(201);
-    res.json(contact);
+    res.status(200);
+    res.json({ ...contact, phoneNumber: decrypt(contact.phoneNumber) });
   } catch (error) {
     console.log(error);
     res.send(400);

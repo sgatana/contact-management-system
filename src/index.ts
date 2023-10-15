@@ -6,6 +6,7 @@ import connectDb from './config/db';
 import errorHandler from './middlewares/errorHandler';
 import authRouter from './routes/auth';
 import contactRoutes from './routes/contacts';
+import { authMiddleware } from './middlewares/auth';
 
 // initialize mongoDb connection
 connectDb();
@@ -18,9 +19,9 @@ app.use(
   })
 );
 
-app.use(errorHandler as any)
 app.use('/v1/auth', authRouter);
-app.use('/v1/contacts', contactRoutes);
+app.use('/v1/contacts', authMiddleware, contactRoutes);
+app.use(errorHandler as any)
 const PORT = process.env.PORT ?? 8080;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

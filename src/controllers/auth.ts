@@ -11,9 +11,9 @@ export const registerUser = async (req: Request, res: Response) => {
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
       res.status(400);
-      throw new Error('Email already registered');
+     return res.json({error: 'Email already registered'});
     }
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = await createUser({
       email,
@@ -23,23 +23,24 @@ export const registerUser = async (req: Request, res: Response) => {
     return res.status(201).json(user);
   } catch (error) {
     console.log(error);
-    res.send(400);
-    throw new Error(error);
+    res.status(400);
+    res.json({ error });
   }
 };
 
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const user = await getUserByEmail(email);
+    const user = await getUserByEmail(email).select('+password');
+    console.log(user)
     if (!user) {
       res.status(401);
-      throw new Error('Invalid Credentials');
+      return res.json({ error: 'Invalid Credentials' });
     }
     const isMatchingPassword = await bcrypt.compare(password, user.password);
     if (!isMatchingPassword) {
       res.status(403);
-      throw new Error('Invalid Password');
+      return res.json({ error: 'Invalid Password' });
     }
     return res.status(200).json({
       email,
@@ -47,7 +48,8 @@ export const login = async (req: Request, res: Response) => {
       accessToken: generateAccessToken(email),
     });
   } catch (error) {
-    res.status(400);
-    console.log(error);
+    console.log(error)
+    res.status(401);
+    res.json({ error: 'Invalid Credentialsss' });
   }
 };
