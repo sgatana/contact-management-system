@@ -9,11 +9,11 @@ import {
 import validate from '../../helpers';
 import { createUserSchema } from '../../schemas/contactSchema';
 
-const authRouter = Router();
-authRouter.get('/', getAllContacts);
-authRouter.post('/', validate(createUserSchema), createContact);
-authRouter.get('/:id', getContact);
-authRouter.patch('/:id', updateContact);
-authRouter.delete('/:id', deleteUserContact);
+const contactRouter = Router();
+contactRouter.get('/', getAllContacts);
+contactRouter.post('/', validate(createUserSchema), createContact);
+contactRouter.get('/:id', getContact);
+contactRouter.patch('/:id', updateContact);
+contactRouter.delete('/:id', deleteUserContact);
 
-export default authRouter;
+export default contactRouter;
