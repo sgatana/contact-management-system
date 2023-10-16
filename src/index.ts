@@ -11,15 +11,11 @@ connectDb();
 
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use('/v1/auth', authRouter);
 app.use('/v1/contacts', authMiddleware, contactRoutes);
-app.use(errorHandler as any)
+app.use(errorHandler as any);
 const PORT = process.env.PORT ?? 8080;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

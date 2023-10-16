@@ -10,6 +10,7 @@ a RESTful API that allows users to create, retrieve, update, and delete contact 
 - Token based authentication (Bearer)
 - Postman testing
 - Create, Read, Update Delete (CRUD) operations
+- Encrypt and Decrypt phone number
 
 #### Prerequisites
 
